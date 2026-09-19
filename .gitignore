@@ -45,3 +45,8 @@ coverage/
 .vite/
 .turbo/
 *.tsbuildinfo
+
+# hoplite sources that happen to match the generic env patterns above;
+# these are real source files and must stay tracked.
+!hoplite-core/src/main/kotlin/com/sksamuel/hoplite/env/
+!hoplite-core/src/test/resources/.env.properties

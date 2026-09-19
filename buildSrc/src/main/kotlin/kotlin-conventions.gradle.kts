@@ -1,3 +1,4 @@
+import org.gradle.api.artifacts.dsl.LockMode
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -14,7 +15,9 @@ java {
 }
 
 kotlin {
-   jvmToolchain(11)
+   // The JDK major version used for every compile and test task in this tree.
+   // verify.sh and the CI workflows must agree with this exact value.
+   jvmToolchain(17)
    compilerOptions {
       jvmTarget.set(JvmTarget.JVM_1_8)
       apiVersion.set(KotlinVersion.KOTLIN_2_2)
@@ -35,9 +38,20 @@ tasks.compileTestJava {
 }
 
 dependencies {
-   testImplementation("io.kotest:kotest-runner-junit5:6.1.4")
-   testImplementation("io.kotest:kotest-assertions-core:6.1.4")
-   testImplementation("io.kotest:kotest-extensions-testcontainers:6.1.4")
+   val kotestVersion = providers.gradleProperty("kotest.version").get()
+   testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+   testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
+   testImplementation("io.kotest:kotest-extensions-testcontainers:$kotestVersion")
+}
+
+dependencyLocking {
+   lockAllConfigurations()
+   // Strict mode is enabled by verify.sh (-Pverify.strict.locks=true) so that
+   // lock validation is read-only and exact. Without the flag, modules that
+   // have no lockfile (e.g. the cloud SDK modules) keep resolving as before.
+   if (providers.gradleProperty("verify.strict.locks").isPresent) {
+      lockMode.set(LockMode.STRICT)
+   }
 }
 
 tasks.withType<Test> {
@@ -45,6 +59,12 @@ tasks.withType<Test> {
    filter {
       isFailOnNoMatchingTests = false
    }
+   // kotest's system extensions (withEnvironment etc.) reflect into JDK
+   // internals, which requires explicit opens on the JDK 17 toolchain.
+   jvmArgs(
+      "--add-opens", "java.base/java.util=ALL-UNNAMED",
+      "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+   )
    testLogging {
       showExceptions = true
       showStandardStreams = true

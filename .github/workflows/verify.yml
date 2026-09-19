@@ -1,0 +1,32 @@
+name: verify
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      # Must match jvmToolchain(...) in
+      # buildSrc/src/main/kotlin/kotlin-conventions.gradle.kts and
+      # EXPECTED_JDK_MAJOR in verify.sh (enforced by the toolchain gate).
+      - uses: actions/setup-java@v5
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Only this step may use the network: it provisions the JDK (if
+      # missing), the Gradle wrapper distribution, the dependency lock
+      # files and the dependency cache. No dependency-cache actions are
+      # used, so this stays an honest cold start.
+      - name: prime (network allowed)
+        run: bash verify.sh --prime
+
+      # Fully offline: every Gradle invocation runs with --offline.
+      - name: verify (offline)
+        run: bash verify.sh
