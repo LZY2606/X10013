@@ -1,0 +1,8 @@
+c: ${random.int}
+d: ${random.boolean}
+e: ${random.int(9)}
+f: ${random.int(100,999)}
+g: ${random.long}
+h: ${random.double}
+i: hello ${random.string(14)}
+uuid: ${random.uuid}
