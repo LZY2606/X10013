@@ -1,0 +1,33 @@
+name: verify
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      # Same JDK major as jvmToolchain(17) in kotlin-conventions.gradle.kts;
+      # gate "toolchain" fails the run if these ever drift apart.
+      - uses: actions/setup-java@v5
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Only this step is allowed to touch the network: it installs the JDK if
+      # needed, warms the wrapper, downloads dependencies and writes lock files.
+      # No dependency-cache action is used, so the cold start stays honest.
+      - name: prime (networked preparation)
+        run: bash verify.sh --prime
+
+      # Fully offline: seven gates, every Gradle call with --offline.
+      - name: verify (offline)
+        run: bash verify.sh
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.parallel=false -Dorg.gradle.jvmargs="-Xmx3g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"

@@ -37,6 +37,10 @@ Pods/
 .DS_Store
 .env
 .env.*
+# These two paths are source files that happen to match the rules above;
+# the build does not compile without them, so they must stay committable.
+!**/src/main/kotlin/com/sksamuel/hoplite/env/
+!**/src/test/resources/.env.properties
 coverage/
 .coverage
 .nyc_output/

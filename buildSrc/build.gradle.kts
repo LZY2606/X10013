@@ -1,3 +1,4 @@
+import org.gradle.api.artifacts.dsl.LockMode
 import org.gradle.kotlin.dsl.`kotlin-dsl`
 
 repositories {
@@ -9,6 +10,16 @@ plugins {
 }
 
 dependencies {
-   implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.10")
-   implementation("com.vanniktech.maven.publish:com.vanniktech.maven.publish.gradle.plugin:0.35.0")
+   implementation(libs.kotlin.gradle.plugin)
+   implementation(libs.vanniktech.maven.publish)
+}
+
+val verifyLocksStrict = providers.gradleProperty("verify.locks.strict").isPresent
+if (providers.gradleProperty("verify.locks").isPresent || verifyLocksStrict) {
+   dependencyLocking {
+      lockAllConfigurations()
+      if (verifyLocksStrict) {
+         lockMode.set(LockMode.STRICT)
+      }
+   }
 }

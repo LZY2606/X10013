@@ -1,0 +1,72 @@
+# Single source of truth for every external coordinate in this repository.
+# Consumed by the main build (settings.gradle.kts) and by buildSrc
+# (buildSrc/settings.gradle.kts), so both classpaths resolve the same versions.
+
+[versions]
+kotlin = "2.2.21"
+kotest = "6.1.4"
+vanniktech = "0.35.0"
+micrometer = "1.14.1"
+coroutines = "1.6.4"
+aws1 = "1.12.767"
+aws2 = "2.27.0"
+aws-kotlin = "1.4.44"
+jackson = "2.17.2"
+testcontainers = "1.19.8"
+
+[libraries]
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+vanniktech-maven-publish = { module = "com.vanniktech.maven.publish:com.vanniktech.maven.publish.gradle.plugin", version.ref = "vanniktech" }
+
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-extensions-testcontainers = { module = "io.kotest:kotest-extensions-testcontainers", version.ref = "kotest" }
+
+micrometer-core = { module = "io.micrometer:micrometer-core", version.ref = "micrometer" }
+micrometer-registry-datadog = { module = "io.micrometer:micrometer-registry-datadog", version.ref = "micrometer" }
+micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "micrometer" }
+micrometer-registry-statsd = { module = "io.micrometer:micrometer-registry-statsd", version.ref = "micrometer" }
+
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-jdk8 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8", version.ref = "coroutines" }
+
+typesafe-config = { module = "com.typesafe:config", version = "1.4.3" }
+arrow-core = { module = "io.arrow-kt:arrow-core", version = "2.0.1" }
+spring-vault-core = { module = "org.springframework.vault:spring-vault-core", version = "2.3.4" }
+vavr-kotlin = { module = "io.vavr:vavr-kotlin", version = "0.10.2" }
+cron-utils = { module = "com.cronutils:cron-utils", version = "9.2.1" }
+hikaricp = { module = "com.zaxxer:HikariCP", version = "5.1.0" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.4.1" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.4.0" }
+google-cloud-secretmanager = { module = "com.google.cloud:google-cloud-secretmanager", version = "2.54.0" }
+hadoop-common = { module = "org.apache.hadoop:hadoop-common", version = "2.10.2" }
+tomlj = { module = "org.tomlj:tomlj", version = "1.1.1" }
+embedded-consul = { module = "com.pszymczyk.consul:embedded-consul", version = "2.2.1" }
+snakeyaml = { module = "org.yaml:snakeyaml", version = "2.2" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version = "2.0.14" }
+
+aws-java-sdk-secretsmanager = { module = "com.amazonaws:aws-java-sdk-secretsmanager", version.ref = "aws1" }
+aws-java-sdk-ssm = { module = "com.amazonaws:aws-java-sdk-ssm", version.ref = "aws1" }
+regions = { module = "software.amazon.awssdk:regions", version.ref = "aws2" }
+secretsmanager = { module = "software.amazon.awssdk:secretsmanager", version.ref = "aws2" }
+aws-kotlin-ssm = { module = "aws.sdk.kotlin:ssm", version.ref = "aws-kotlin" }
+aws-kotlin-secretsmanager = { module = "aws.sdk.kotlin:secretsmanager", version.ref = "aws-kotlin" }
+
+postgresql = { module = "org.postgresql:postgresql", version = "42.7.3" }
+jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+
+testcontainers-base = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers" }
+testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
+testcontainers-mysql = { module = "org.testcontainers:mysql", version.ref = "testcontainers" }
+testcontainers-localstack = { module = "org.testcontainers:localstack", version.ref = "testcontainers" }
+testcontainers-vault = { module = "org.testcontainers:vault", version.ref = "testcontainers" }
+
+azure-identity = { module = "com.azure:azure-identity", version = "1.13.2" }
+azure-security-keyvault-secrets = { module = "com.azure:azure-security-keyvault-secrets", version = "4.9.0" }
+consul-client = { module = "com.orbitz.consul:consul-client", version = "1.5.3" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
